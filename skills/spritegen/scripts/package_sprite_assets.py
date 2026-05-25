@@ -23,8 +23,14 @@ def main() -> None:
     args = parser.parse_args()
 
     run_dir = Path(args.run_dir).expanduser().resolve()
-    request = json.loads((run_dir / "sprite_request.json").read_text(encoding="utf-8"))
-    manifest = json.loads((run_dir / "final" / "manifest.json").read_text(encoding="utf-8"))
+    request_path = run_dir / "sprite_request.json"
+    manifest_path = run_dir / "final" / "manifest.json"
+    if not request_path.exists():
+        raise SystemExit(f"Missing sprite_request.json: {request_path}")
+    if not manifest_path.exists():
+        raise SystemExit("Run slice_asset_sheet.py before packaging")
+    request = json.loads(request_path.read_text(encoding="utf-8"))
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     package_dir = run_dir / "package"
     slices_out = package_dir / "slices"
     package_dir.mkdir(parents=True, exist_ok=True)

@@ -21,7 +21,7 @@ def edge_alpha_count(image: Image.Image) -> int:
     for x in range(image.width):
         count += 1 if alpha.getpixel((x, 0)) else 0
         count += 1 if alpha.getpixel((x, image.height - 1)) else 0
-    for y in range(image.height):
+    for y in range(1, image.height - 1):
         count += 1 if alpha.getpixel((0, y)) else 0
         count += 1 if alpha.getpixel((image.width - 1, y)) else 0
     return count

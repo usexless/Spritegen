@@ -1,0 +1,27 @@
+{
+  "name": "spritegen-installer",
+  "version": "0.1.0",
+  "description": "Spritegen installer for AI coding agents.",
+  "license": "MIT",
+  "author": "Jakob",
+  "homepage": "https://github.com/usexless/Spritegen",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/usexless/Spritegen.git"
+  },
+  "bin": {
+    "spritegen": "./bin/install.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "bin/",
+    "skills/",
+    ".codex-plugin/",
+    "install.ps1",
+    "INSTALL.md",
+    "README.md",
+    "requirements.txt"
+  ]
+}

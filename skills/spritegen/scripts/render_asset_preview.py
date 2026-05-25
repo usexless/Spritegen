@@ -33,7 +33,10 @@ def main() -> None:
     args = parser.parse_args()
 
     run_dir = Path(args.run_dir).expanduser().resolve()
-    manifest = json.loads((run_dir / "final" / "manifest.json").read_text(encoding="utf-8"))
+    manifest_path = run_dir / "final" / "manifest.json"
+    if not manifest_path.exists():
+        raise SystemExit("Run slice_asset_sheet.py before rendering previews")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     preview_dir = run_dir / "preview"
     preview_dir.mkdir(parents=True, exist_ok=True)
     duration_ms = max(20, int(1000 / args.fps))

@@ -27,7 +27,10 @@ def main() -> None:
     args = parser.parse_args()
 
     run_dir = Path(args.run_dir).expanduser().resolve()
-    manifest = json.loads((run_dir / "final" / "manifest.json").read_text(encoding="utf-8"))
+    manifest_path = run_dir / "final" / "manifest.json"
+    if not manifest_path.exists():
+        raise SystemExit("Run slice_asset_sheet.py before making the contact sheet")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     columns, rows = manifest["grid"]
     cell_w, cell_h = manifest["cellSize"]
     label_h = 18
