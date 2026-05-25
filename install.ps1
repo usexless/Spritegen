@@ -71,7 +71,7 @@ function Parse-Args([string[]]$RawArgs) {
 function Get-SourceRoot($Options) {
   if ($Options.Source) { return $Options.Source }
 
-  $here = Split-Path -Parent $MyInvocation.ScriptName
+  $here = if ($MyInvocation.ScriptName) { Split-Path -Parent $MyInvocation.ScriptName } else { $null }
   if ($here -and (Test-Path (Join-Path $here "skills\spritegen\SKILL.md"))) {
     return $here
   }
