@@ -1,6 +1,6 @@
 ---
 name: spritegen
-description: Create, repair, validate, preview, slice, and package generic 2D pixel-art assets from text concepts, screenshots, generated images, or visual references. Use when Codex needs to generate game-ready or UI-ready pixel-style sprites, props, icons, tile sets, character sprites, object sheets, VFX frames, simple animation strips, contact sheets, GIF/MP4 previews, or transparent PNG/WebP assets without using the Codex pet-specific atlas contract.
+description: Create, repair, validate, preview, slice, and package generic 2D pixel-art assets from text concepts, screenshots, generated images, or visual references. Use when asked to generate game-ready or UI-ready pixel-style sprites, props, icons, tile sets, character sprites, object sheets, VFX frames, simple animation strips, contact sheets, GIF/MP4 previews, or transparent PNG/WebP assets.
 ---
 
 # Spritegen
@@ -13,9 +13,22 @@ This is not the pet-generation workflow. Do not use pet row names, pet manifests
 
 ## Core Rule
 
-Use `$imagegen` for visual generation. Use this skill's Python scripts only for deterministic asset operations.
+Use the image generator available to your agent for visual generation. Use this skill's Python scripts only for deterministic asset operations.
 
 Do not draw, invent, or fake final asset art with Python, SVG, HTML canvas, CSS, or local image transforms as a substitute for model-generated visuals. Local scripts may crop, slice, validate, compose contact sheets, render previews, convert formats, and package files.
+
+## Image Generation by Agent
+
+Pick the correct tool for the agent you are running in:
+
+| Agent | How to generate images |
+|---|---|
+| **Codex** | `$imagegen` — built-in, call directly |
+| **Antigravity** | Built-in image generation — call directly |
+| **Gemini CLI** | Nano Banana extension: install with `gemini extension install nanobanana`, then use `/generate <prompt>` or the `generate_image` tool |
+| **Claude Code** | Use an installed MCP image tool. Check for `mcp__pixa__*`, `mcp__imagegen__*`, `mcp__proxima__generate_image`, or any other available `*generate_image*` MCP tool. If none are installed, tell the user to install an image generation MCP (e.g. Pixa MCP or image-gen-mcp) and pause. |
+
+If you cannot determine which agent you are in, look for available image generation tools and use the first one found. Never fabricate images locally.
 
 ## Default Workflow
 
@@ -34,7 +47,7 @@ python "$SKILL_DIR/scripts/prepare_sprite_run.py" \
   --force
 ```
 
-3. Read `prompts/generation-prompt.txt` and call `$imagegen` with that prompt plus any user references. If references exist, attach them with clear role labels.
+3. Read `prompts/generation-prompt.txt` and call your agent's image generator (see **Image Generation by Agent** above) with that prompt plus any user references. If references exist, attach them with clear role labels.
 4. Record the selected original generated image:
 
 ```bash

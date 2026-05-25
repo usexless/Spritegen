@@ -9,7 +9,7 @@
 [CmdletBinding()]
 param(
   [Parameter(ValueFromRemainingArguments = $true)]
-  [string[]]$Args
+  [string[]]$CliArgs
 )
 
 $ErrorActionPreference = "Stop"
@@ -153,7 +153,7 @@ function Get-Providers {
   $codexHome = if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $homeDir ".codex" }
   $claudeHome = if ($env:CLAUDE_CONFIG_DIR) { $env:CLAUDE_CONFIG_DIR } else { Join-Path $homeDir ".claude" }
   return @(
-    @{ Name = "codex"; Detected = (Test-Path $codexHome); SkillPath = (Join-Path $codexHome "skills\spritegen"); RulePath = $null },
+    @{ Name = "codex"; Detected = (Test-Path $codexHome); SkillPath = (Join-Path $codexHome "skills\spritegen"); RulePath = (Join-Path $codexHome "AGENTS.md") },
     @{ Name = "claude"; Detected = [bool]((Get-Command claude -ErrorAction SilentlyContinue) -or (Test-Path $claudeHome)); SkillPath = (Join-Path $claudeHome "skills\spritegen"); RulePath = (Join-Path $claudeHome "CLAUDE.md") },
     @{ Name = "gemini"; Detected = [bool]((Get-Command gemini -ErrorAction SilentlyContinue) -or (Test-Path (Join-Path $homeDir ".gemini"))); SkillPath = (Join-Path $homeDir ".gemini\skills\spritegen"); RulePath = (Join-Path $homeDir ".gemini\GEMINI.md") },
     @{ Name = "cursor"; Detected = (Test-Path ".cursor"); SkillPath = $null; RulePath = ".cursor\rules\spritegen.mdc" },
@@ -172,7 +172,7 @@ Load the Spritegen skill if available. Keep visual generation in the image model
 "@
 }
 
-$options = Parse-Args $Args
+$options = Parse-Args $CliArgs
 $providers = Get-Providers
 
 if ($options.List) {
@@ -217,12 +217,27 @@ foreach ($provider in $selected) {
       Copy-Tree $skillSource $provider.SkillPath $options.DryRun
     }
   }
-  if ($provider.RulePath -and ($options.WithInit -or $provider.Name -in @("claude", "gemini"))) {
+  if ($provider.RulePath -and ($options.WithInit -or $provider.Name -in @("claude", "codex", "gemini"))) {
     if ($options.Uninstall) {
       Remove-MarkerBlock $provider.RulePath $ruleBegin $ruleEnd $options.DryRun
     } else {
       Upsert-MarkerBlock $provider.RulePath $ruleBegin $ruleEnd (Rule-Body) $options.DryRun
     }
+  }
+}
+
+$python = Get-Command python -ErrorAction SilentlyContinue
+if (-not $python) { $python = Get-Command python3 -ErrorAction SilentlyContinue }
+if (-not $python) {
+  Write-Host "[spritegen] warning: python not found - install Python 3.10+ and run: pip install Pillow"
+} else {
+  $previousPreference = $ErrorActionPreference
+  $ErrorActionPreference = "Continue"
+  $null = & $python.Source -c "import PIL" 2>&1
+  $pillowExit = $LASTEXITCODE
+  $ErrorActionPreference = $previousPreference
+  if ($pillowExit -ne 0) {
+    Write-Host "[spritegen] warning: Pillow not installed - run: pip install Pillow"
   }
 }
 

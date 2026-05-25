@@ -16,9 +16,10 @@ Local clone:
 pwsh .\install.ps1
 ```
 
-Node/NPM path:
+Via npx (Node 18+):
 
 ```powershell
+npx -y github:usexless/Spritegen
 npx -y github:usexless/Spritegen -- --dry-run
 ```
 
