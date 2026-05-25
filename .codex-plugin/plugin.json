@@ -1,0 +1,23 @@
+{
+  "name": "spritegen",
+  "version": "0.1.0",
+  "description": "Generate, inspect, slice, preview, and package consistent 2D pixel-art asset sheets.",
+  "author": {
+    "name": "Jakob"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Spritegen",
+    "shortDescription": "Create 2D pixel-art sprites, icons, props, tiles, and animation strips.",
+    "longDescription": "Spritegen provides a reusable AI-agent workflow for generating 2D pixel-art assets with image models, then deterministically slicing, validating, previewing, and packaging the results.",
+    "developerName": "Jakob",
+    "category": "Design",
+    "capabilities": [
+      "2D pixel-art asset generation",
+      "spritesheet slicing",
+      "contact-sheet QA",
+      "animation preview rendering"
+    ],
+    "defaultPrompt": "Use Spritegen to create a consistent 2D pixel-art asset sheet, validate it, and package the usable files."
+  }
+}

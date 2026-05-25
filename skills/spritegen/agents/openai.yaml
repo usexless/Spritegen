@@ -1,0 +1,4 @@
+interface:
+  display_name: "Spritegen"
+  short_description: "Generate consistent 2D pixel-art game assets and sprites."
+  default_prompt: "Use this skill to plan, generate, QA, and package 2D pixel-art assets such as sprites, icons, tiles, props, UI items, and simple animation strips."
